@@ -17,8 +17,8 @@ const mintuesToMilisec = (min) => min * 1000 * 60;
 const formatTime = (time) => (time <= 9 ? `0${time}` : time);
 const FocusPage = ({ route, navigation }) => {
   const { Data, setData } = useContext(FocusContext);
-  const { id, focus, time, sets, completedSets } = route.params;
-  const [millis, setMillis] = useState(mintuesToMilisec(1));
+  const { id, focus, time, sets } = route.params;
+  const [millis, setMillis] = useState(mintuesToMilisec(time));
   const [paused, setPaused] = useState(true);
   const [showAnime, setShowAnime] = useState(true);
   const minute = Math.floor(millis / 1000 / 60) % 60;
