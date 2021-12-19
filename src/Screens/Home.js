@@ -16,7 +16,7 @@ import Tasks from "../Components/Tasks";
 import { FocusContext } from "../context/Focus";
 import { DarkColors, LightColors, SIZES } from "../Styles/Constants";
 import PendingTask from "../Components/PendingTask";
-import CompletedTasks from "../Components/CompletedTasks";
+import CompletedTask from "../Components/CompletedTask";
 
 const Home = ({ navigation }) => {
   const isDarkMode = useColorScheme() === "dark";
@@ -30,24 +30,24 @@ const Home = ({ navigation }) => {
   const { colors } = useTheme();
   const { Data } = useContext(FocusContext);
 
-  const section = {
-    Pending: <PendingTask Data={Data} navigation={navigation} />,
-    Completed: <CompletedTasks Data={Data} navigation={navigation} />,
-  };
-
-  const [toggle, SetToggle] = useState("Pending");
-
-  let CompletedTasksLength = Data.filter((val) => {
+  let CompletedTasks = Data.filter((val) => {
     if (val.completed === true) {
       return val;
     }
-  }).length;
+  });
 
-  let PendingTasksLength = Data.filter((val) => {
+  let PendingTasks = Data.filter((val) => {
     if (val.completed === false) {
       return val;
     }
-  }).length;
+  });
+
+  const section = {
+    Pending: <PendingTask Data={PendingTasks} navigation={navigation} />,
+    Completed: <CompletedTask Data={CompletedTasks} navigation={navigation} />,
+  };
+
+  const [toggle, SetToggle] = useState("Pending");
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -91,7 +91,7 @@ const Home = ({ navigation }) => {
               color: colors.text,
             }}
           >
-            👌 Completed : {CompletedTasksLength}
+            👌 Completed : {CompletedTasks.length}
           </Text>
           <Text
             style={{
@@ -100,7 +100,7 @@ const Home = ({ navigation }) => {
               color: colors.text,
             }}
           >
-            👎 Pending : {PendingTasksLength}
+            👎 Pending : {PendingTasks.length}
           </Text>
         </View>
         <View style={{ width: "30%" }}>

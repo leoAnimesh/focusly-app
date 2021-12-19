@@ -11,6 +11,25 @@ const Tasks = ({
 }) => {
   const { colors } = useTheme();
   const { Data, setData } = useContext(FocusContext);
+  const deleteTask = (id) => {
+    const itemsCopy = Data.filter((value) => {
+      if (value.id !== id) {
+        return value;
+      }
+    });
+    setData(itemsCopy);
+  };
+
+  const restoreTask = (id) => {
+    setData(
+      Data.map((val) => {
+        if (val.id === id) {
+          return { ...val, completed: false, sets: val.setsCopy };
+        }
+        return val;
+      })
+    );
+  };
   return (
     <View
       style={{
@@ -73,15 +92,16 @@ const Tasks = ({
             color={colors.text}
             style={{ marginRight: SIZES.md }}
           />
-        ) : (
+        ) : null}
+        {completed ? (
           <MaterialCommunityIcons
             name="delete"
             size={20}
             color={colors.text}
-            onPress={deleteTask(id)}
+            onPress={() => deleteTask(id)}
             style={{ marginRight: SIZES.md }}
           />
-        )}
+        ) : null}
         {remainder ? (
           <MaterialCommunityIcons
             name="bell-ring"
@@ -90,19 +110,32 @@ const Tasks = ({
             style={{ marginRight: SIZES.md }}
           />
         ) : null}
-        <MaterialCommunityIcons
-          name="play-circle"
-          size={20}
-          color={colors.text}
-          onPress={() => {
-            navigation.navigate("Focus", {
-              focus,
-              time,
-              sets,
-              id,
-            });
-          }}
-        />
+        {completed === false ? (
+          <MaterialCommunityIcons
+            name="play-circle"
+            size={20}
+            color={colors.text}
+            onPress={() => {
+              navigation.navigate("Focus", {
+                focus,
+                time,
+                sets,
+                id,
+              });
+            }}
+          />
+        ) : null}
+
+        {completed ? (
+          <MaterialCommunityIcons
+            name="reload"
+            size={20}
+            color={colors.text}
+            onPress={() => {
+              restoreTask(id);
+            }}
+          />
+        ) : null}
       </View>
     </View>
   );

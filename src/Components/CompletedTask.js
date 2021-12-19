@@ -3,17 +3,12 @@ import React from "react";
 import { View, Text, ScrollView } from "react-native";
 import Tasks from "./Tasks";
 
-const CompletedTasks = ({ Data, navigation }) => {
+const CompletedTask = ({ Data, navigation }) => {
   const { colors } = useTheme();
-  const CompletedTask = Data.filter((val) => {
-    if (val.completed === true) {
-      return val;
-    }
-  });
   return (
     <ScrollView showsVerticalScrollIndicator={true}>
-      {CompletedTask.length !== 0 ? (
-        CompletedTask.map((item, idx) => (
+      {Data.length !== 0 ? (
+        Data.map((item, idx) => (
           <Tasks navigation={navigation} key={idx} index={idx} item={item} />
         ))
       ) : (
@@ -25,4 +20,4 @@ const CompletedTasks = ({ Data, navigation }) => {
   );
 };
 
-export default CompletedTasks;
+export default CompletedTask;

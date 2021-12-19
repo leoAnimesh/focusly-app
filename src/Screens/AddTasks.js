@@ -86,6 +86,7 @@ const AddTasks = ({ navigation }) => {
         focus: title,
         time: Time,
         sets: Set,
+        setsCopy: Set,
         priority: Priority,
         date: date.toLocaleString(),
         remainder: check,
@@ -102,8 +103,6 @@ const AddTasks = ({ navigation }) => {
     setCheck(false);
     navigation.navigate("Home");
   };
-
-  console.log(Data);
 
   return (
     <SafeAreaView style={backgroundStyle}>

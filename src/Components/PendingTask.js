@@ -5,15 +5,10 @@ import Tasks from "./Tasks";
 
 const PendingTask = ({ Data, navigation }) => {
   const { colors } = useTheme();
-  const PendingTask = Data.filter((val) => {
-    if (val.completed === false) {
-      return val;
-    }
-  });
   return (
     <ScrollView showsVerticalScrollIndicator={true}>
-      {PendingTask.length !== 0 ? (
-        PendingTask.map((item, idx) => (
+      {Data.length !== 0 ? (
+        Data.map((item, idx) => (
           <Tasks navigation={navigation} key={idx} index={idx} item={item} />
         ))
       ) : (
