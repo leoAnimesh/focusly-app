@@ -1,6 +1,6 @@
 Focusly App - using React Native
 
-🚧 under Production 🚧
+🚧 under construction 🚧 🤣
 
 ### Local Setup
 
