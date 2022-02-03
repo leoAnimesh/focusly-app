@@ -4,7 +4,7 @@
     "slug": "focusly-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/focus.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "plugins": [
       [
