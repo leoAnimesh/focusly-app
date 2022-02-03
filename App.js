@@ -4,16 +4,21 @@ import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
+  useTheme,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { FocusContext } from "./src/context/Focus";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { DarkColors, LightColors } from "./src/Styles/Constants";
-import Home from "./src/Screens/Home";
-import AddTasks from "./src/Screens/AddTasks";
-import FocusPage from "./src/Screens/FocusPage";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import AddFocusTasks from "./src/Screens/Focus/AddFocusTasks";
+import FocusPage from "./src/Screens/Focus/FocusPage";
+import FocusHome from "./src/Screens/Focus/FocusHome";
+import TasksHome from "./src/Screens/Tasks/TasksHome";
+import NotesHome from "./src/Screens/Notes/NotesHome";
+import ExpenseHome from "./src/Screens/Expense/ExpenseHome";
+import { FocusProvider } from "./src/context/Focus/FocusState";
+import { FontAwesome } from "@expo/vector-icons";
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
 const Dark = {
   dark: true,
@@ -39,60 +44,119 @@ const Light = {
 
 const App = () => {
   const isDarkMode = useColorScheme() === "dark";
-  const [Data, setData] = useState([]);
-  useEffect(async () => {
-    try {
-      const value = await JSON.parse(
-        await AsyncStorage.getItem("FOCUSLY::DATA")
-      );
-      if (value) {
-        setData(value);
-      }
-    } catch (error) {
-      Alert(error);
-    }
-  }, []);
-
-  useEffect(async () => {
-    if (Data.length !== 0) {
-      try {
-        await AsyncStorage.setItem("FOCUSLY::DATA", JSON.stringify(Data));
-      } catch (error) {
-        Alert(error);
-      }
-    } else {
-      try {
-        await AsyncStorage.removeItem("FOCUSLY::DATA");
-      } catch (error) {
-        Alert(error);
-      }
-    }
-  }, [Data]);
   return (
-    <FocusContext.Provider value={{ Data, setData }}>
-      <NavigationContainer theme={isDarkMode ? Dark : Light}>
-        <Stack.Navigator
-          initialRouteName="Home"
-          screenOptions={{ animation: "slide_from_right" }}
+    <NavigationContainer theme={isDarkMode ? Dark : Light}>
+      <Drawer.Navigator screenOptions={{}}>
+        <Drawer.Screen
+          name="Focus"
+          options={{
+            drawerActiveTintColor: isDarkMode
+              ? DarkColors.text
+              : LightColors.text,
+            drawerIcon: ({ color }) => (
+              <FontAwesome name="trophy" size={20} color={color} />
+            ),
+          }}
         >
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="AddTasks"
-            component={AddTasks}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Focus"
-            component={FocusPage}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </FocusContext.Provider>
+          {() => (
+            <FocusProvider>
+              <Stack.Navigator
+                initialRouteName="Home"
+                screenOptions={{ animation: "slide_from_right" }}
+              >
+                <Stack.Screen
+                  name="Home"
+                  component={FocusHome}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="AddFocusTasks"
+                  component={AddFocusTasks}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Focusing"
+                  component={FocusPage}
+                  options={{ headerShown: false }}
+                />
+              </Stack.Navigator>
+            </FocusProvider>
+          )}
+        </Drawer.Screen>
+        <Drawer.Screen
+          name="Tasks"
+          options={{
+            drawerActiveTintColor: isDarkMode
+              ? DarkColors.text
+              : LightColors.text,
+            drawerIcon: ({ color }) => (
+              <FontAwesome name="tasks" size={20} color={color} />
+            ),
+          }}
+        >
+          {() => (
+            <Stack.Navigator
+              initialRouteName="Home"
+              screenOptions={{ animation: "slide_from_right" }}
+            >
+              <Stack.Screen
+                name="Home"
+                component={TasksHome}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          )}
+        </Drawer.Screen>
+        <Drawer.Screen
+          name="Notes"
+          options={{
+            drawerActiveTintColor: isDarkMode
+              ? DarkColors.text
+              : LightColors.text,
+            drawerIcon: ({ color }) => (
+              <FontAwesome name="sticky-note" size={20} color={color} />
+            ),
+          }}
+        >
+          {() => (
+            <Stack.Navigator
+              initialRouteName="Home"
+              screenOptions={{ animation: "slide_from_right" }}
+            >
+              <Stack.Screen
+                name="Home"
+                component={NotesHome}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          )}
+        </Drawer.Screen>
+        <Drawer.Screen
+          name="Expense"
+          options={{
+            drawerActiveTintColor: isDarkMode
+              ? DarkColors.text
+              : LightColors.text,
+            drawerIcon: ({ color }) => (
+              <FontAwesome name="money" size={20} color={color} />
+            ),
+          }}
+        >
+          {() => (
+            <Stack.Navigator
+              initialRouteName="Home"
+              screenOptions={{ animation: "slide_from_right" }}
+            >
+              <Stack.Screen
+                name="Home"
+                component={ExpenseHome}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          )}
+        </Drawer.Screen>
+      </Drawer.Navigator>
+    </NavigationContainer>
   );
 };
 

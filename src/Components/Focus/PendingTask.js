@@ -1,9 +1,9 @@
 import { useTheme } from "@react-navigation/native";
 import React from "react";
 import { View, Text, ScrollView } from "react-native";
-import Tasks from "./Tasks";
+import Tasks from "../Tasks";
 
-const CompletedTask = ({ Data, navigation }) => {
+const PendingTask = ({ Data, navigation }) => {
   const { colors } = useTheme();
   return (
     <ScrollView showsVerticalScrollIndicator={true}>
@@ -20,4 +20,4 @@ const CompletedTask = ({ Data, navigation }) => {
   );
 };
 
-export default CompletedTask;
+export default PendingTask;

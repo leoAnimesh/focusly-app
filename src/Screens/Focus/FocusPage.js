@@ -10,15 +10,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 import LottieView from "lottie-react-native";
-import { SIZES } from "../Styles/Constants";
-import { FocusContext } from "../context/Focus";
+import { SIZES } from "../../Styles/Constants";
+import { FocusContext } from "../../context/Focus/FocusState";
 
 const mintuesToMilisec = (min) => min * 1000 * 60;
 const formatTime = (time) => (time <= 9 ? `0${time}` : time);
 const FocusPage = ({ route, navigation }) => {
-  const { Data, setData } = useContext(FocusContext);
+  const { updateFocusTask } = useContext(FocusContext);
   const { id, focus, time, sets } = route.params;
-  const [millis, setMillis] = useState(mintuesToMilisec(time));
+  const [millis, setMillis] = useState(mintuesToMilisec(1));
   const [paused, setPaused] = useState(true);
   const [showAnime, setShowAnime] = useState(true);
   const minute = Math.floor(millis / 1000 / 60) % 60;
@@ -33,21 +33,6 @@ const FocusPage = ({ route, navigation }) => {
       const timeLeft = time - 1000;
       return timeLeft;
     });
-  };
-
-  const updateSet = (id) => {
-    setData(
-      Data.map((item) => {
-        if (item.id === id) {
-          return {
-            ...item,
-            sets: item.sets - 1,
-            completed: remainingSets === 0 ? true : false,
-          };
-        }
-        return item;
-      })
-    );
   };
 
   useEffect(() => {
@@ -146,14 +131,14 @@ const FocusPage = ({ route, navigation }) => {
               }}
             >
               <LottieView
-                source={require("../assets/lottie/start.json")}
+                source={require("../../assets/lottie/start.json")}
                 autoPlay
                 loop
               />
             </View>
           ) : paused ? (
             <LottieView
-              source={require("../assets/lottie/Sad.json")}
+              source={require("../../assets/lottie/Sad.json")}
               autoPlay
               loop
             />
@@ -161,8 +146,8 @@ const FocusPage = ({ route, navigation }) => {
             <LottieView
               source={
                 isDark
-                  ? require("../assets/lottie/focus_dark.json")
-                  : require("../assets/lottie/focus_light.json")
+                  ? require("../../assets/lottie/focus_dark.json")
+                  : require("../../assets/lottie/focus_light.json")
               }
               autoPlay
               loop
@@ -179,10 +164,10 @@ const FocusPage = ({ route, navigation }) => {
         >
           <LottieView
             style={{ width: "100%" }}
-            source={require("../assets/lottie/completed.json")}
+            source={require("../../assets/lottie/completed.json")}
             onAnimationFinish={() =>
               setTimeout(() => {
-                updateSet(id);
+                updateFocusTask({ id, remainingSets });
                 navigation.navigate("Home");
               }, 3000)
             }
